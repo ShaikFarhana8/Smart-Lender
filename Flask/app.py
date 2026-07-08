@@ -1,0 +1,135 @@
+from flask import Flask, render_template, request
+import pickle
+import numpy as np
+import os
+
+app = Flask(__name__)
+
+# Load trained model
+model = pickle.load(open("rdf.pkl", "rb"))
+
+# Load scaler if available
+scaler = None
+if os.path.exists("scale1.pkl"):
+    scaler = pickle.load(open("scale1.pkl", "rb"))
+
+
+@app.route("/")
+def home():
+    return render_template("home.html")
+
+
+@app.route("/input")
+def input_page():
+    return render_template("input.html")
+
+
+@app.route("/submit", methods=["POST"])
+def submit():
+
+    try:
+        # Get values from form
+        gender = int(request.form["Gender"])
+        married = int(request.form["Married"])
+        dependents = int(request.form["Dependents"])
+        education = int(request.form["Education"])
+        self_employed = int(request.form["Self_Employed"])
+        applicant_income = float(request.form["ApplicantIncome"])
+        coapplicant_income = float(request.form["CoapplicantIncome"])
+        loan_amount = float(request.form["LoanAmount"])
+        loan_term = float(request.form["Loan_Amount_Term"])
+        credit_history = int(request.form["Credit_History"])
+        property_area = int(request.form["Property_Area"])
+
+        # Create feature array
+        features = np.array([[
+            gender,
+            married,
+            dependents,
+            education,
+            self_employed,
+            applicant_income,
+            coapplicant_income,
+            loan_amount,
+            loan_term,
+            credit_history,
+            property_area
+        ]])
+
+        # Scale features if scaler exists
+        if scaler is not None:
+            features = scaler.transform(features)
+
+        # Prediction
+        prediction = model.predict(features)[0]
+
+        # Approval probability
+        if hasattr(model, "predict_proba"):
+            probability = model.predict_proba(features)[0][1] * 100
+        else:
+            probability = 100 if prediction == 1 else 0
+
+        # Result text
+        if prediction == 1:
+            result = "Loan Approved ✅"
+        else:
+            result = "Loan Rejected ❌"
+
+        # Explanation
+        reasons = []
+
+        if credit_history == 1:
+            reasons.append("✔ Good Credit History")
+        else:
+            reasons.append("❌ No Credit History")
+
+        if applicant_income >= 5000:
+            reasons.append("✔ Stable Applicant Income")
+        else:
+            reasons.append("⚠ Low Applicant Income")
+
+        if coapplicant_income > 0:
+            reasons.append("✔ Additional Co-applicant Income")
+
+        if education == 1:
+            reasons.append("✔ Graduate Applicant")
+        else:
+            reasons.append("⚠ Not Graduate")
+
+        if self_employed == 0:
+            reasons.append("✔ Salaried Employee")
+        else:
+            reasons.append("ℹ Self-Employed Applicant")
+
+        if dependents == 0:
+            reasons.append("✔ No Dependents")
+        elif dependents <= 2:
+            reasons.append("✔ Few Dependents")
+        else:
+            reasons.append("⚠ Many Dependents")
+
+        if loan_amount <= 150:
+            reasons.append("✔ Moderate Loan Amount")
+        else:
+            reasons.append("⚠ High Loan Amount")
+
+        if property_area == 2:
+            reasons.append("✔ Urban Property Area")
+        elif property_area == 1:
+            reasons.append("✔ Semiurban Property Area")
+        else:
+            reasons.append("✔ Rural Property Area")
+
+        return render_template(
+            "output.html",
+            prediction=result,
+            probability=round(probability, 2),
+            reasons=reasons
+        )
+
+    except Exception as e:
+        return f"<h2>Error</h2><p>{e}</p>"
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Lender - Prediction Result</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+.container{
+    width:700px;
+    margin:50px auto;
+    background:#ffffff;
+    padding:35px;
+    border-radius:12px;
+    box-shadow:0 0 20px rgba(0,0,0,0.15);
+    text-align:center;
+}
+
+h1{
+    color:#0d6efd;
+    margin-bottom:25px;
+}
+
+.approved{
+    color:#198754;
+    font-size:32px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.rejected{
+    color:#dc3545;
+    font-size:32px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.card{
+    background:#f8f9fa;
+    border-radius:10px;
+    padding:18px;
+    margin-top:20px;
+}
+
+.card h3{
+    color:#0d6efd;
+    margin-bottom:10px;
+}
+
+.probability{
+    font-size:28px;
+    color:#198754;
+    font-weight:bold;
+}
+
+.reason-box{
+    text-align:left;
+    margin-top:25px;
+}
+
+.reason-box ul{
+    padding-left:20px;
+}
+
+.reason-box li{
+    font-size:18px;
+    margin:10px 0;
+}
+
+.buttons{
+    margin-top:35px;
+}
+
+.btn{
+    display:inline-block;
+    padding:12px 24px;
+    margin:8px;
+    border-radius:6px;
+    text-decoration:none;
+    color:white;
+    font-size:16px;
+}
+
+.predict{
+    background:#198754;
+}
+
+.predict:hover{
+    background:#146c43;
+}
+
+.home{
+    background:#0d6efd;
+}
+
+.home:hover{
+    background:#0b5ed7;
+}
+
+.footer{
+    margin-top:30px;
+    color:gray;
+    font-size:14px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Smart Lender</h1>
+
+{% if "Approved" in prediction %}
+
+<div class="approved">
+    {{ prediction }}
+</div>
+
+{% else %}
+
+<div class="rejected">
+    {{ prediction }}
+</div>
+
+{% endif %}
+
+<div class="card">
+
+<h3>Approval Probability</h3>
+
+<div class="probability">
+    {{ probability }} %
+</div>
+
+</div>
+
+<div class="card reason-box">
+
+<h3>Reason for Prediction</h3>
+
+<ul>
+
+{% for reason in reasons %}
+
+<li>{{ reason }}</li>
+
+{% endfor %}
+
+</ul>
+
+</div>
+
+<div class="buttons">
+
+<a href="/input" class="btn predict">
+Predict Again
+</a>
+
+<a href="/" class="btn home">
+Home
+</a>
+
+</div>
+
+<div class="footer">
+
+Smart Lender © 2026
+
+</div>
+
+</div>
+
+</body>
+
+</html>
