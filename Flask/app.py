@@ -28,7 +28,7 @@ def input_page():
 def submit():
 
     try:
-        # Get values from form
+
         gender = int(request.form["Gender"])
         married = int(request.form["Married"])
         dependents = int(request.form["Dependents"])
@@ -41,7 +41,6 @@ def submit():
         credit_history = int(request.form["Credit_History"])
         property_area = int(request.form["Property_Area"])
 
-        # Create feature array
         features = np.array([[
             gender,
             married,
@@ -56,26 +55,59 @@ def submit():
             property_area
         ]])
 
-        # Scale features if scaler exists
         if scaler is not None:
             features = scaler.transform(features)
 
-        # Prediction
         prediction = model.predict(features)[0]
 
-        # Approval probability
         if hasattr(model, "predict_proba"):
             probability = model.predict_proba(features)[0][1] * 100
         else:
             probability = 100 if prediction == 1 else 0
 
-        # Result text
         if prediction == 1:
             result = "Loan Approved ✅"
         else:
             result = "Loan Rejected ❌"
+        # Approval Score
+        score = round(probability)
 
-        # Explanation
+        # -------------------------
+        # Risk Level
+        # -------------------------
+
+        if probability >= 80:
+            risk = "🟢 Low Risk"
+
+        elif probability >= 60:
+            risk = "🟡 Medium Risk"
+
+        else:
+            risk = "🔴 High Risk"
+            # Loan Eligibility Score
+            score = round(probability)
+     # EMI Calculation
+        annual_interest_rate = 8.5
+        monthly_interest_rate = annual_interest_rate / (12 * 100)
+
+        loan_amount_rupees = loan_amount
+        months = int(loan_term)
+
+        if monthly_interest_rate > 0:
+          emi = (
+                loan_amount_rupees
+                * monthly_interest_rate
+                * (1 + monthly_interest_rate) ** months
+            ) / (
+              (1 + monthly_interest_rate) ** months - 1
+            )
+        else:
+           emi = loan_amount_rupees / months
+
+        # -------------------------
+        # Prediction Explanation
+        # -------------------------
+
         reasons = []
 
         if credit_history == 1:
@@ -100,13 +132,12 @@ def submit():
             reasons.append("✔ Salaried Employee")
         else:
             reasons.append("ℹ Self-Employed Applicant")
-
-        if dependents == 0:
-            reasons.append("✔ No Dependents")
-        elif dependents <= 2:
-            reasons.append("✔ Few Dependents")
-        else:
-            reasons.append("⚠ Many Dependents")
+            if dependents == 0:
+                reasons.append("✔ No Dependents")
+            elif dependents <= 2:
+                reasons.append("✔ Few Dependents")
+            else:
+                reasons.append("⚠ Many Dependents")
 
         if loan_amount <= 150:
             reasons.append("✔ Moderate Loan Amount")
@@ -124,11 +155,19 @@ def submit():
             "output.html",
             prediction=result,
             probability=round(probability, 2),
+            score=score,
+            risk=risk,
+            emi=round(emi,2),
             reasons=reasons
         )
-
+            
+        
     except Exception as e:
-        return f"<h2>Error</h2><p>{e}</p>"
+        return f"""
+        <h2>Error Occurred</h2>
+        <p>{e}</p>
+        <a href='/input'>Go Back</a>
+        """
 
 
 if __name__ == "__main__":

@@ -3,122 +3,103 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Smart Lender - Prediction Result</title>
+    <title>Prediction Result</title>
 
-<style>
+    <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
+        *{
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
 
-body{
-    background:#f4f6f9;
-}
+        body{
+            margin:0;
+            padding:0;
+            background:#f4f4f4;
+        }
 
-.container{
-    width:700px;
-    margin:50px auto;
-    background:#ffffff;
-    padding:35px;
-    border-radius:12px;
-    box-shadow:0 0 20px rgba(0,0,0,0.15);
-    text-align:center;
-}
+        .container{
+            width:750px;
+            margin:40px auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0px 0px 10px rgba(0,0,0,0.2);
+            text-align:center;
+        }
 
-h1{
-    color:#0d6efd;
-    margin-bottom:25px;
-}
+        h1{
+            color:#0d6efd;
+            margin-bottom:25px;
+        }
 
-.approved{
-    color:#198754;
-    font-size:32px;
-    font-weight:bold;
-    margin-bottom:20px;
-}
+        .card{
+            background:#f8f9fa;
+            padding:20px;
+            margin-top:20px;
+            border-radius:8px;
+            border-left:6px solid #0d6efd;
+        }
 
-.rejected{
-    color:#dc3545;
-    font-size:32px;
-    font-weight:bold;
-    margin-bottom:20px;
-}
+        .prediction{
+            font-size:30px;
+            font-weight:bold;
+            color:#198754;
+        }
 
-.card{
-    background:#f8f9fa;
-    border-radius:10px;
-    padding:18px;
-    margin-top:20px;
-}
+        .probability{
+            font-size:28px;
+            color:#0d6efd;
+            font-weight:bold;
+        }
 
-.card h3{
-    color:#0d6efd;
-    margin-bottom:10px;
-}
+        .score{
+            font-size:30px;
+            color:#fd7e14;
+            font-weight:bold;
+        }
 
-.probability{
-    font-size:28px;
-    color:#198754;
-    font-weight:bold;
-}
+        .risk{
+            font-size:28px;
+            font-weight:bold;
+        }
 
-.reason-box{
-    text-align:left;
-    margin-top:25px;
-}
+        .reason-box{
+            margin-top:25px;
+            background:#f8f9fa;
+            padding:20px;
+            border-radius:8px;
+            text-align:left;
+        }
 
-.reason-box ul{
-    padding-left:20px;
-}
+        .reason-box h3{
+            text-align:center;
+        }
 
-.reason-box li{
-    font-size:18px;
-    margin:10px 0;
-}
+        ul{
+            font-size:18px;
+            line-height:35px;
+        }
 
-.buttons{
-    margin-top:35px;
-}
+        .btn{
+            display:inline-block;
+            margin-top:30px;
+            padding:12px 30px;
+            background:#0d6efd;
+            color:white;
+            text-decoration:none;
+            border-radius:6px;
+            font-size:18px;
+        }
 
-.btn{
-    display:inline-block;
-    padding:12px 24px;
-    margin:8px;
-    border-radius:6px;
-    text-decoration:none;
-    color:white;
-    font-size:16px;
-}
+        .btn:hover{
+            background:#0b5ed7;
+        }
 
-.predict{
-    background:#198754;
-}
-
-.predict:hover{
-    background:#146c43;
-}
-
-.home{
-    background:#0d6efd;
-}
-
-.home:hover{
-    background:#0b5ed7;
-}
-
-.footer{
-    margin-top:30px;
-    color:gray;
-    font-size:14px;
-}
-
-</style>
+    </style>
 
 </head>
 
@@ -126,65 +107,84 @@ h1{
 
 <div class="container">
 
-<h1>Smart Lender</h1>
+    <h1>Smart Lender</h1>
 
-{% if "Approved" in prediction %}
+    <div class="card">
 
-<div class="approved">
-    {{ prediction }}
+        <h3>Prediction Result</h3>
+
+        <div class="prediction">
+
+            {{ prediction }}
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Approval Probability</h3>
+
+        <div class="probability">
+
+            {{ probability }} %
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Loan Eligibility Score</h3>
+
+        <div class="score">
+
+            {{ score }}/100
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Risk Level</h3>
+
+        <div class="risk">
+
+            {{ risk }}
+
+        </div>
+
+    </div>
+    <div class="card">
+
+    <h3>Estimated Monthly EMI</h3>
+
+    <div class="score">
+
+        ₹ {{ emi }}
+
+    </div>
+
 </div>
 
-{% else %}
+    <div class="reason-box">
 
-<div class="rejected">
-    {{ prediction }}
-</div>
+        <h3>Reason for Prediction</h3>
 
-{% endif %}
+        <ul>
 
-<div class="card">
+            {% for reason in reasons %}
 
-<h3>Approval Probability</h3>
+                <li>{{ reason }}</li>
 
-<div class="probability">
-    {{ probability }} %
-</div>
+            {% endfor %}
 
-</div>
+        </ul>
 
-<div class="card reason-box">
+    </div>
 
-<h3>Reason for Prediction</h3>
-
-<ul>
-
-{% for reason in reasons %}
-
-<li>{{ reason }}</li>
-
-{% endfor %}
-
-</ul>
-
-</div>
-
-<div class="buttons">
-
-<a href="/input" class="btn predict">
-Predict Again
-</a>
-
-<a href="/" class="btn home">
-Home
-</a>
-
-</div>
-
-<div class="footer">
-
-Smart Lender © 2026
-
-</div>
+    <a href="/input" class="btn">Predict Again</a>
 
 </div>
 
