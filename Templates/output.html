@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Lender | Prediction Result</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🏦 Smart Lender</h1>
+
+    <h3>AI Loan Approval Prediction Result</h3>
+
+
+    <!-- Result Card -->
+
+    {% if "Approved" in prediction %}
+
+    <div class="result approved">
+
+        <h2>{{ prediction }}</h2>
+
+        <p>
+
+            Congratulations!
+
+            Your financial profile indicates a high chance of loan approval.
+
+        </p>
+
+    </div>
+
+    {% else %}
+
+    <div class="result rejected">
+
+        <h2>{{ prediction }}</h2>
+
+        <p>
+
+            Unfortunately, your loan may not be approved based on the provided details.
+
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+
+    <!-- Summary -->
+
+    <div class="summary">
+
+        <div class="card">
+
+            <h4>Approval Score</h4>
+
+            <p>{{ score }}%</p>
+
+        </div>
+
+        <div class="card">
+
+            <h4>Probability</h4>
+
+            <p>{{ probability }}%</p>
+
+        </div>
+
+        <div class="card">
+
+            <h4>Risk Level</h4>
+
+            <p>{{ risk }}</p>
+
+        </div>
+
+        <div class="card">
+
+            <h4>Estimated EMI</h4>
+
+            <p>₹ {{ emi }}/month</p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Progress Bar -->
+
+    <h3>Loan Eligibility Score</h3>
+
+    <div class="progress">
+
+        <div class="progress-bar" style="width:{{ score }}%;">
+
+            {{ score }}%
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Prediction Time -->
+
+    <div class="time">
+
+        <strong>Prediction Time :</strong>
+
+        {{ time }}
+
+    </div>
+
+
+
+    <!-- Reasons -->
+
+    <div class="section">
+
+        <h2>Prediction Explanation</h2>
+
+        <ul>
+
+            {% for reason in reasons %}
+
+            <li>{{ reason }}</li>
+
+            {% endfor %}
+
+        </ul>
+
+    </div>
+
+
+
+    <!-- Suggestions -->
+
+    <div class="section">
+
+        <h2>Suggestions</h2>
+
+        <ul>
+
+            {% if "Approved" in prediction %}
+
+            <li>✔ Keep all required documents ready.</li>
+
+            <li>✔ Maintain your good credit history.</li>
+
+            <li>✔ Compare loan offers before accepting.</li>
+
+            <li>✔ Review EMI affordability.</li>
+
+            {% else %}
+
+            <li>✔ Improve your credit history.</li>
+
+            <li>✔ Increase your monthly income.</li>
+
+            <li>✔ Apply with a co-applicant.</li>
+
+            <li>✔ Reduce the requested loan amount.</li>
+
+            {% endif %}
+
+        </ul>
+
+    </div>
+
+
+
+    <!-- Action Buttons -->
+
+    <div class="buttons">
+
+        <a href="/input">
+
+            <button>
+
+                Predict Another Loan
+
+            </button>
+
+        </a>
+
+        <a href="/">
+
+            <button class="home">
+
+                Back to Home
+
+            </button>
+
+        </a>
+
+    </div>
+
+
+
+    <footer>
+
+        <p>
+
+            © 2026 Smart Lender
+
+            
+        </p>
+
+    </footer>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,127 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+    background:#f4f8f5;
+}
+
+/* Header */
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#0b8f4d;
+    padding:18px 60px;
+}
+
+.logo{
+    color:#fff;
+    font-size:30px;
+    font-weight:bold;
+}
+
+nav a{
+    color:#fff;
+    text-decoration:none;
+    margin-left:25px;
+    font-size:18px;
+    transition:.3s;
+}
+
+nav a:hover{
+    color:#ffd54f;
+}
+
+/* Hero */
+
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:70px;
+}
+
+.hero-text{
+    width:50%;
+}
+
+.hero-text h1{
+    font-size:48px;
+    color:#0b8f4d;
+    margin-bottom:20px;
+}
+
+.hero-text p{
+    font-size:20px;
+    line-height:1.8;
+    color:#555;
+    margin-bottom:30px;
+}
+
+.btn{
+    display:inline-block;
+    background:#0b8f4d;
+    color:white;
+    text-decoration:none;
+    padding:15px 35px;
+    border-radius:8px;
+    font-size:18px;
+    transition:.3s;
+}
+
+.btn:hover{
+    background:#066938;
+}
+
+.hero-image img{
+    width:520px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+}
+
+/* Cards */
+
+.features{
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    padding:30px 60px;
+}
+
+.card{
+    background:white;
+    width:300px;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 6px 18px rgba(0,0,0,.1);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card h2{
+    color:#0b8f4d;
+    margin-bottom:15px;
+}
+
+.card p{
+    color:#666;
+    line-height:1.6;
+}
+
+/* Footer */
+
+footer{
+    margin-top:50px;
+    background:#0b8f4d;
+    color:white;
+    text-align:center;
+    padding:25px;
+}
