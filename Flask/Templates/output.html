@@ -6,100 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Prediction Result</title>
+    <title>Smart Lender | Prediction Result</title>
 
-    <style>
-
-        *{
-            box-sizing:border-box;
-            font-family:Arial, Helvetica, sans-serif;
-        }
-
-        body{
-            margin:0;
-            padding:0;
-            background:#f4f4f4;
-        }
-
-        .container{
-            width:750px;
-            margin:40px auto;
-            background:white;
-            padding:30px;
-            border-radius:10px;
-            box-shadow:0px 0px 10px rgba(0,0,0,0.2);
-            text-align:center;
-        }
-
-        h1{
-            color:#0d6efd;
-            margin-bottom:25px;
-        }
-
-        .card{
-            background:#f8f9fa;
-            padding:20px;
-            margin-top:20px;
-            border-radius:8px;
-            border-left:6px solid #0d6efd;
-        }
-
-        .prediction{
-            font-size:30px;
-            font-weight:bold;
-            color:#198754;
-        }
-
-        .probability{
-            font-size:28px;
-            color:#0d6efd;
-            font-weight:bold;
-        }
-
-        .score{
-            font-size:30px;
-            color:#fd7e14;
-            font-weight:bold;
-        }
-
-        .risk{
-            font-size:28px;
-            font-weight:bold;
-        }
-
-        .reason-box{
-            margin-top:25px;
-            background:#f8f9fa;
-            padding:20px;
-            border-radius:8px;
-            text-align:left;
-        }
-
-        .reason-box h3{
-            text-align:center;
-        }
-
-        ul{
-            font-size:18px;
-            line-height:35px;
-        }
-
-        .btn{
-            display:inline-block;
-            margin-top:30px;
-            padding:12px 30px;
-            background:#0d6efd;
-            color:white;
-            text-decoration:none;
-            border-radius:6px;
-            font-size:18px;
-        }
-
-        .btn:hover{
-            background:#0b5ed7;
-        }
-
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
 
 </head>
 
@@ -107,76 +16,123 @@
 
 <div class="container">
 
-    <h1>Smart Lender</h1>
+    <h1>🏦 Smart Lender</h1>
 
-    <div class="card">
+    <h3>AI Loan Approval Prediction Result</h3>
 
-        <h3>Prediction Result</h3>
 
-        <div class="prediction">
+    <!-- Result Card -->
 
-            {{ prediction }}
+    {% if "Approved" in prediction %}
+
+    <div class="result approved">
+
+        <h2>{{ prediction }}</h2>
+
+        <p>
+
+            Congratulations!
+
+            Your financial profile indicates a high chance of loan approval.
+
+        </p>
+
+    </div>
+
+    {% else %}
+
+    <div class="result rejected">
+
+        <h2>{{ prediction }}</h2>
+
+        <p>
+
+            Unfortunately, your loan may not be approved based on the provided details.
+
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+
+    <!-- Summary -->
+
+    <div class="summary">
+
+        <div class="card">
+
+            <h4>Approval Score</h4>
+
+            <p>{{ score }}%</p>
+
+        </div>
+
+        <div class="card">
+
+            <h4>Probability</h4>
+
+            <p>{{ probability }}%</p>
+
+        </div>
+
+        <div class="card">
+
+            <h4>Risk Level</h4>
+
+            <p>{{ risk }}</p>
+
+        </div>
+
+        <div class="card">
+
+            <h4>Estimated EMI</h4>
+
+            <p>₹ {{ emi }}/month</p>
 
         </div>
 
     </div>
 
-    <div class="card">
 
-        <h3>Approval Probability</h3>
 
-        <div class="probability">
+    <!-- Progress Bar -->
 
-            {{ probability }} %
+    <h3>Loan Eligibility Score</h3>
 
+    <div class="progress">
+
+        <div class="progress-bar" style="width: {{ score }}%;">
+             {{ score }}%
         </div>
+    </div>
+
+
+
+    <!-- Prediction Time -->
+
+    <div class="time">
+
+        <strong>Prediction Time :</strong>
+
+        {{ time }}
 
     </div>
 
-    <div class="card">
 
-        <h3>Loan Eligibility Score</h3>
 
-        <div class="score">
+    <!-- Reasons -->
 
-            {{ score }}/100
+    <div class="section">
 
-        </div>
-
-    </div>
-
-    <div class="card">
-
-        <h3>Risk Level</h3>
-
-        <div class="risk">
-
-            {{ risk }}
-
-        </div>
-
-    </div>
-    <div class="card">
-
-    <h3>Estimated Monthly EMI</h3>
-
-    <div class="score">
-
-        ₹ {{ emi }}
-
-    </div>
-
-</div>
-
-    <div class="reason-box">
-
-        <h3>Reason for Prediction</h3>
+        <h2>Prediction Explanation</h2>
 
         <ul>
 
             {% for reason in reasons %}
 
-                <li>{{ reason }}</li>
+            <li>{{ reason }}</li>
 
             {% endfor %}
 
@@ -184,7 +140,82 @@
 
     </div>
 
-    <a href="/input" class="btn">Predict Again</a>
+
+
+    <!-- Suggestions -->
+
+    <div class="section">
+
+        <h2>Suggestions</h2>
+
+        <ul>
+
+            {% if "Approved" in prediction %}
+
+            <li>✔ Keep all required documents ready.</li>
+
+            <li>✔ Maintain your good credit history.</li>
+
+            <li>✔ Compare loan offers before accepting.</li>
+
+            <li>✔ Review EMI affordability.</li>
+
+            {% else %}
+
+            <li>✔ Improve your credit history.</li>
+
+            <li>✔ Increase your monthly income.</li>
+
+            <li>✔ Apply with a co-applicant.</li>
+
+            <li>✔ Reduce the requested loan amount.</li>
+
+            {% endif %}
+
+        </ul>
+
+    </div>
+
+
+
+    <!-- Action Buttons -->
+
+    <div class="buttons">
+
+        <a href="/input">
+
+            <button>
+
+                Predict Another Loan
+
+            </button>
+
+        </a>
+
+        <a href="/">
+
+            <button class="home">
+
+                Back to Home
+
+            </button>
+
+        </a>
+
+    </div>
+
+
+
+    <footer>
+
+        <p>
+
+            © 2026 Smart Lender
+
+            
+        </p>
+
+    </footer>
 
 </div>
 

@@ -1,4 +1,6 @@
+import pandas as pd
 from flask import Flask, render_template, request
+from datetime import datetime
 import pickle
 import numpy as np
 import os
@@ -40,6 +42,13 @@ def submit():
         loan_term = float(request.form["Loan_Amount_Term"])
         credit_history = int(request.form["Credit_History"])
         property_area = int(request.form["Property_Area"])
+        # Validate Inputs
+        if applicant_income <= 0:
+           return "Applicant Income must be greater than 0"
+        if loan_amount <= 0:
+            return "Loan Amount must be greater than 0"
+        if loan_term <= 0:
+            return "Loan Term must be greater than 0"
 
         features = np.array([[
             gender,
@@ -62,13 +71,30 @@ def submit():
 
         if hasattr(model, "predict_proba"):
             probability = model.predict_proba(features)[0][1] * 100
+            # ===============================
+            # Loan Eligibility Score
+            # ===============================
+            score = round(probability)
+            # ===============================
+            # # Risk Level
+            # # ===============================
+            if probability >= 85:
+               risk = "🟢 Very Low Risk"
+            elif probability >= 70:
+               risk = "🟢 Low Risk"
+            elif probability >= 50:
+                risk = "🟡 Medium Risk"
+            else:
+                risk = "🔴 High Risk"
         else:
             probability = 100 if prediction == 1 else 0
 
         if prediction == 1:
             result = "Loan Approved ✅"
+            message = "Congratulations! Based on your financial profile, your loan has a high probability of approval."
         else:
             result = "Loan Rejected ❌"
+            message = "Unfortunately, your loan is not likely to be approved at this time. Improving your credit history or financial profile may increase your chances."
         # Approval Score
         score = round(probability)
 
@@ -76,14 +102,16 @@ def submit():
         # Risk Level
         # -------------------------
 
-        if probability >= 80:
+        if probability >= 90:
+            risk = "🟢 Excellent"
+        elif probability >= 75:
             risk = "🟢 Low Risk"
-
         elif probability >= 60:
             risk = "🟡 Medium Risk"
-
+        elif probability >= 40:
+            risk = "🟠 High Risk"
         else:
-            risk = "🔴 High Risk"
+            risk = "🔴 Very High Risk"
             # Loan Eligibility Score
             score = round(probability)
      # EMI Calculation
@@ -150,16 +178,32 @@ def submit():
             reasons.append("✔ Semiurban Property Area")
         else:
             reasons.append("✔ Rural Property Area")
+        current_time = datetime.now().strftime("%d-%m-%Y %I:%M %p")
+        record = {
+    "Prediction": result,
+    "Probability": probability,
+    "Risk": risk,
+    "Applicant Income": applicant_income,
+    "Loan Amount": loan_amount
+}
+        data = pd.DataFrame([record])
+        data.to_csv(
+    "history.csv",
+    mode="a",
+    header=not os.path.exists("history.csv"),
+    index=False
+)
 
         return render_template(
-            "output.html",
-            prediction=result,
-            probability=round(probability, 2),
-            score=score,
-            risk=risk,
-            emi=round(emi,2),
-            reasons=reasons
-        )
+    "output.html",
+    score=score,
+    prediction=result,
+    probability=round(probability, 2),
+    risk=risk,
+    emi=round(emi, 2),
+    reasons=reasons
+    time=current_time
+)
             
         
     except Exception as e:

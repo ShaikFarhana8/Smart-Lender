@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Smart Lender - Loan Application</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/input.css') }}">
 
     <style>
 
@@ -75,9 +76,10 @@
 
 <div class="container">
 
-<h2>Loan Application Form</h2>
+    <h1>Smart Lender</h1>
+    <h3>Loan Approval Prediction System</h3>
 
-<form action="/submit" method="post">
+    <form action="/submit" method="post">
 
 <label for="Gender">Gender</label>
 
@@ -192,6 +194,9 @@ required>
 <input type="submit" value="Predict Loan Status">
 
 </form>
+<div class="footer">
+    © 2026 Smart Lender | AI-Powered Loan Approval Prediction
+</div>
 
 </div>
 
