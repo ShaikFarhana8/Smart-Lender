@@ -1,0 +1,250 @@
+/* ==========================================
+   SMART LENDER DASHBOARD
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+    background:#f4f7f9;
+    color:#333;
+}
+
+/* ================= HEADER ================= */
+
+header{
+    background:#0b6b3a;
+    color:#fff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 50px;
+    box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
+
+header h2{
+    font-size:28px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin-left:25px;
+    font-size:17px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+nav a:hover,
+nav .active{
+    color:#ffd54f;
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
+    width:95%;
+    max-width:1350px;
+    margin:35px auto;
+}
+
+/* ================= TITLE ================= */
+
+.container h1{
+    text-align:center;
+    color:#0b6b3a;
+    margin-bottom:35px;
+}
+
+/* ================= CARDS ================= */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+    margin-bottom:40px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 8px 18px rgba(0,0,0,.12);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+}
+
+.card h2{
+    font-size:42px;
+    color:#0b6b3a;
+    margin-bottom:10px;
+}
+
+.card p{
+    color:#666;
+    font-size:18px;
+}
+
+.approved{
+    border-left:8px solid #28a745;
+}
+
+.rejected{
+    border-left:8px solid #dc3545;
+}
+
+/* ================= CHARTS ================= */
+
+.chart-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
+    gap:30px;
+    margin-bottom:40px;
+}
+
+.chart-card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0 5px 15px rgba(0,0,0,.12);
+}
+
+.chart-card h3{
+    text-align:center;
+    color:#0b6b3a;
+    margin-bottom:20px;
+}
+
+canvas{
+    width:100% !important;
+    height:320px !important;
+}
+
+/* ================= SEARCH ================= */
+
+.search-box{
+    text-align:right;
+    margin-bottom:20px;
+}
+
+.search-box input{
+    width:320px;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:16px;
+    outline:none;
+}
+
+.search-box input:focus{
+    border:2px solid #0b6b3a;
+}
+
+/* ================= TABLE ================= */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+thead{
+    background:#0b6b3a;
+    color:white;
+}
+
+th{
+    padding:16px;
+    text-align:center;
+}
+
+td{
+    padding:15px;
+    text-align:center;
+    border-bottom:1px solid #ddd;
+}
+
+tbody tr:nth-child(even){
+    background:#f7f9fa;
+}
+
+tbody tr:hover{
+    background:#eaf7ee;
+}
+
+/* ================= BUTTONS ================= */
+
+.buttons{
+    text-align:center;
+    margin-top:30px;
+}
+
+.buttons button{
+    background:#0b6b3a;
+    color:white;
+    border:none;
+    padding:14px 28px;
+    margin:10px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.buttons button:hover{
+    background:#198754;
+    transform:scale(1.05);
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+    margin-top:50px;
+    background:#0b6b3a;
+    color:white;
+    text-align:center;
+    padding:18px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+
+header{
+    flex-direction:column;
+    gap:15px;
+}
+
+nav{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.chart-grid{
+    grid-template-columns:1fr;
+}
+
+.search-box{
+    text-align:center;
+}
+
+.search-box input{
+    width:100%;
+}
+
+table{
+    display:block;
+    overflow-x:auto;
+}
+
+}
