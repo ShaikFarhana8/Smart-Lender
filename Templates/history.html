@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Lender | History</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+
+</head>
+
+<body>
+
+<header>
+
+    <h2>🏦 Smart Lender</h2>
+
+    <nav>
+
+        <a href="/">Home</a>
+
+        <a href="/input">Apply Loan</a>
+
+        <a href="/history" class="active">History</a>
+
+        <a href="/dashboard">Dashboard</a>
+
+    </nav>
+
+</header>
+
+
+<div class="container">
+
+    <h1>Loan Prediction History</h1>
+
+    {% if records|length == 0 %}
+
+        <div class="empty">
+
+            <h2>No Prediction History Found</h2>
+
+            <p>Your predictions will appear here after you submit a loan application.</p>
+
+            <a href="/input" class="btn">
+                Predict Loan
+            </a>
+
+        </div>
+
+    {% else %}
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Date</th>
+
+                <th>Prediction</th>
+
+                <th>Probability</th>
+
+                <th>Risk</th>
+
+                <th>Applicant Income</th>
+
+                <th>Loan Amount</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for row in records %}
+
+        <tr>
+
+            <td>{{ row["Date"] }}</td>
+
+            <td>{{ row["Prediction"] }}</td>
+
+            <td>{{ row["Probability"] }}%</td>
+
+            <td>{{ row["Risk"] }}</td>
+
+            <td>₹ {{ row["Applicant Income"] }}</td>
+
+            <td>₹ {{ row["Loan Amount"] }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <div class="buttons">
+
+        <a href="/dashboard" class="btn">
+            Analytics Dashboard
+        </a>
+
+        <button onclick="window.print()">
+            🖨 Print History
+        </button>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<footer>
+
+<p>
+
+© 2026 Smart Lender | AI Loan Prediction System
+
+</p>
+
+</footer>
+
+</body>
+
+</html>

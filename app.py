@@ -180,8 +180,9 @@ def submit():
             reasons.append("✔ Rural Property Area")
         current_time = datetime.now().strftime("%d-%m-%Y %I:%M %p")
         record = {
+            "Date": current_time,
     "Prediction": result,
-    "Probability": probability,
+    "Probability": round(probability,2),
     "Risk": risk,
     "Applicant Income": applicant_income,
     "Loan Amount": loan_amount
@@ -195,12 +196,13 @@ def submit():
 )
 
         return render_template(
+            
     "output.html",
-    prediction=result,
-    probability=round(probability,2),
     score=score,
+    prediction=result,
+    probability=round(probability, 2),
     risk=risk,
-    emi=round(emi,2),
+    emi=round(emi, 2),
     reasons=reasons,
     time=current_time
 )
@@ -212,7 +214,109 @@ def submit():
         <p>{e}</p>
         <a href='/input'>Go Back</a>
         """
+@app.route("/history")
+def history():
 
+    if os.path.exists("history.csv"):
 
+        df = pd.read_csv("history.csv")
+
+        records = df.to_dict(orient="records")
+
+    else:
+
+        records = []
+
+    return render_template(
+        "history.html",
+        records=records
+    )
+@app.route("/dashboard")
+def dashboard():
+
+    if os.path.exists("history.csv"):
+
+        df = pd.read_csv("history.csv")
+
+    else:
+
+        df = pd.DataFrame(columns=[
+            "Date",
+            "Prediction",
+            "Probability",
+            "Risk",
+            "Applicant Income",
+            "Loan Amount"
+        ])
+
+    total = len(df)
+
+    approved = len(df[df["Prediction"].astype(str).str.contains("Approved", na=False)])
+
+    rejected = len(df[df["Prediction"].astype(str).str.contains("Rejected", na=False)])
+
+    approval_rate = round((approved / total) * 100, 2) if total > 0 else 0
+
+    records = df.to_dict(orient="records")
+    approved_count = approved
+    rejected_count = rejected
+
+    excellent = len(df[df["Risk"].astype(str).str.contains("Excellent", na=False)])
+    low = len(df[df["Risk"].astype(str).str.contains("Low Risk", na=False)])
+    medium = len(df[df["Risk"].astype(str).str.contains("Medium Risk", na=False)])
+    high = len(df[df["Risk"].astype(str).str.contains("High Risk", na=False)])
+    very_high = len(df[df["Risk"].astype(str).str.contains("Very High", na=False)])
+    avg_income = round(df["Applicant Income"].mean(), 2) if total else 0
+    avg_loan = round(df["Loan Amount"].mean(), 2) if total else 0
+    max_loan = df["Loan Amount"].max() if total else 0
+    min_loan = df["Loan Amount"].min() if total else 0
+
+    loan_amounts = df["Loan Amount"].tolist() if len(df) > 0 else []
+    df["Date"] = pd.to_datetime(df["Date"])
+    monthly = df.groupby(df["Date"].dt.strftime("%b"))["Prediction"].count()
+
+    months = monthly.index.tolist()
+    counts = monthly.values.tolist()
+    # Loan Amount Distribution
+    loan_labels = []
+    loan_values = []
+
+    if not df.empty:
+        ranges = {
+        "0-50K": len(df[df["Loan Amount"] <= 50000]),
+        "50K-1L": len(df[(df["Loan Amount"] > 50000) & (df["Loan Amount"] <= 100000)]),
+        "1L-2L": len(df[(df["Loan Amount"] > 100000) & (df["Loan Amount"] <= 200000)]),
+        "2L+": len(df[df["Loan Amount"] > 200000])
+    }
+
+    loan_labels = list(ranges.keys())
+    loan_values = list(ranges.values())
+
+    return render_template(
+    "dashboard.html",
+    total=total,
+    approved=approved,
+    rejected=rejected,
+    approval_rate=approval_rate,
+    records=records,
+
+    approved_count=approved_count,
+    rejected_count=rejected_count,
+    avg_income=avg_income,
+    avg_loan=avg_loan,
+    max_loan=max_loan,
+    min_loan=min_loan,
+    months=months,
+    counts=counts,
+
+    excellent=excellent,
+    low=low,
+    medium=medium,
+    high=high,
+    very_high=very_high,
+    loan_labels=loan_labels,
+    loan_values=loan_values,
+    loan_amounts=loan_amounts
+)
 if __name__ == "__main__":
     app.run(debug=True)

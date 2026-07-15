@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Lender Dashboard</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<h2>🏦 Smart Lender Dashboard</h2>
+
+<nav>
+
+<a href="/">Home</a>
+<a href="/input">Apply Loan</a>
+<a href="/history">History</a>
+<a href="/dashboard" class="active">Dashboard</a>
+
+</nav>
+
+</header>
+
+
+
+<div class="container">
+
+
+<h1>Loan Analytics Dashboard</h1>
+
+
+
+<!-- Cards -->
+
+<div class="cards">
+
+
+<div class="card">
+
+<h2>{{ total }}</h2>
+
+<p>Total Predictions</p>
+
+</div>
+
+
+<div class="card approved">
+
+<h2>{{ approved }}</h2>
+
+<p>Approved Loans</p>
+
+</div>
+
+
+<div class="card rejected">
+
+<h2>{{ rejected }}</h2>
+
+<p>Rejected Loans</p>
+
+</div>
+
+
+<div class="card">
+
+<h2>{{ approval_rate }}%</h2>
+
+<p>Approval Rate</p>
+
+</div>
+
+
+</div>
+
+
+
+
+<!-- Charts -->
+
+
+<div class="chart-grid">
+
+
+<div class="chart-card">
+
+<h3>Loan Approval Distribution</h3>
+
+<canvas id="approvalChart"></canvas>
+
+</div>
+
+
+
+<div class="chart-card">
+
+<h3>Risk Level Distribution</h3>
+
+<canvas id="riskChart"></canvas>
+
+</div>
+
+
+
+
+<div class="chart-card">
+
+<h3>Monthly Loan Applications</h3>
+
+<canvas id="trendChart"></canvas>
+
+</div>
+
+
+
+<div class="chart-card">
+
+<h3>Loan Amount Distribution</h3>
+
+<canvas id="loanChart"></canvas>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- Search -->
+
+<div class="search-box">
+
+
+<input 
+type="text"
+id="searchInput"
+placeholder="Search prediction..."
+onkeyup="searchTable()">
+
+
+
+</div>
+
+
+
+
+
+<!-- Table -->
+
+
+<table id="historyTable">
+
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+<th>Prediction</th>
+<th>Probability</th>
+<th>Risk</th>
+<th>Income</th>
+<th>Loan Amount</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody>
+
+
+{% for row in records %}
+
+
+<tr>
+
+<td>{{ row["Date"] }}</td>
+
+<td>{{ row["Prediction"] }}</td>
+
+<td>{{ row["Probability"] }}%</td>
+
+<td>{{ row["Risk"] }}</td>
+
+<td>₹ {{ row["Applicant Income"] }}</td>
+
+<td>₹ {{ row["Loan Amount"] }}</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+
+</tbody>
+
+
+
+</table>
+
+
+
+
+
+<div class="buttons">
+
+
+<button onclick="window.print()">
+
+🖨 Print Report
+
+</button>
+
+
+<button onclick="downloadCSV()">
+
+⬇ Download CSV
+
+</button>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<footer>
+
+<p>
+
+© 2026 Smart Lender | AI Loan Prediction System
+
+</p>
+
+</footer>
+
+
+
+
+
+<!-- Chart.js -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<script>
+
+
+// Search
+
+
+function searchTable(){
+
+
+let input=document
+.getElementById("searchInput")
+.value
+.toUpperCase();
+
+
+
+let rows=document
+.getElementById("historyTable")
+.getElementsByTagName("tr");
+
+
+
+for(let i=1;i<rows.length;i++){
+
+
+let text=rows[i].innerText.toUpperCase();
+
+
+rows[i].style.display =
+text.includes(input) ? "" : "none";
+
+
+}
+
+
+}
+
+
+
+
+// Download CSV
+
+
+function downloadCSV(){
+
+window.location.href="/history.csv";
+
+}
+
+
+
+
+
+
+
+// 1. Approval Pie Chart
+
+
+new Chart(
+document.getElementById("approvalChart"),
+{
+
+type:"pie",
+
+data:{
+
+
+labels:[
+
+"Approved",
+
+"Rejected"
+
+],
+
+
+datasets:[{
+
+data:[
+
+{{ approved_count }},
+
+{{ rejected_count }}
+
+],
+
+
+backgroundColor:[
+
+"#28a745",
+
+"#dc3545"
+
+]
+
+
+}]
+
+
+}
+
+
+});
+
+
+
+
+
+
+
+// 2. Risk Bar Chart
+
+
+
+new Chart(
+document.getElementById("riskChart"),
+{
+
+
+type:"bar",
+
+
+data:{
+
+
+labels:[
+
+"Excellent",
+
+"Low",
+
+"Medium",
+
+"High",
+
+"Very High"
+
+],
+
+
+datasets:[{
+
+label:"Risk",
+
+data:[
+
+{{ excellent }},
+
+{{ low }},
+
+{{ medium }},
+
+{{ high }},
+
+{{ very_high }}
+
+]
+
+
+}]
+
+
+},
+
+
+options:{
+
+
+responsive:true
+
+
+}
+
+
+});
+
+
+
+
+
+
+
+// 3. Monthly Trend Line Chart
+
+
+
+new Chart(
+
+document.getElementById("trendChart"),
+
+{
+
+
+type:"line",
+
+
+data:{
+
+
+labels:{{ months | tojson }},
+
+
+datasets:[{
+
+
+label:"Applications",
+
+
+data:{{ counts | tojson }},
+
+
+fill:true,
+
+tension:0.4
+
+
+}]
+
+
+},
+
+
+options:{
+
+
+responsive:true
+
+
+}
+
+
+}
+
+);
+
+
+
+
+
+
+
+// 4. Loan Amount Chart
+
+
+
+new Chart(
+
+document.getElementById("loanChart"),
+
+{
+
+
+type:"bar",
+
+
+data:{
+
+
+labels:{{ loan_labels | tojson }},
+
+
+datasets:[{
+
+
+label:"Loans",
+
+
+data:{{ loan_values | tojson }}
+
+
+
+}]
+
+
+
+},
+
+
+
+options:{
+
+
+responsive:true
+
+
+
+}
+
+
+}
+
+);
+
+
+
+</script>
+
+
+
+</body>
+
+</html>

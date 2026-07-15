@@ -1,0 +1,198 @@
+/* ==========================================
+   SMART LENDER - HISTORY PAGE
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+    background:#f5f7f6;
+    color:#333;
+}
+
+/* ================= HEADER ================= */
+
+header{
+    background:#0b6b3a;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 50px;
+    box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
+
+header h2{
+    font-size:28px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin-left:25px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+nav a:hover,
+nav .active{
+    color:#ffd54f;
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
+    width:95%;
+    max-width:1200px;
+    margin:40px auto;
+    background:white;
+    border-radius:12px;
+    padding:30px;
+    box-shadow:0 5px 18px rgba(0,0,0,.10);
+}
+
+.container h1{
+    text-align:center;
+    color:#0b6b3a;
+    margin-bottom:30px;
+}
+
+/* ================= TABLE ================= */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#0b6b3a;
+    color:white;
+}
+
+th{
+    padding:15px;
+    text-align:center;
+}
+
+td{
+    padding:14px;
+    text-align:center;
+    border-bottom:1px solid #ddd;
+}
+
+tbody tr:nth-child(even){
+    background:#f7fbf8;
+}
+
+tbody tr:hover{
+    background:#eaf7ee;
+}
+
+/* ================= BUTTONS ================= */
+
+.buttons{
+    margin-top:30px;
+    text-align:center;
+}
+
+.btn,
+button{
+
+    display:inline-block;
+
+    padding:12px 25px;
+
+    margin:10px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#0b6b3a;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.btn:hover,
+button:hover{
+
+    background:#198754;
+
+    transform:translateY(-2px);
+
+}
+
+/* ================= EMPTY STATE ================= */
+
+.empty{
+    text-align:center;
+    padding:60px 20px;
+}
+
+.empty h2{
+    color:#0b6b3a;
+    margin-bottom:15px;
+}
+
+.empty p{
+    color:#666;
+    margin-bottom:25px;
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+    margin-top:40px;
+    background:#0b6b3a;
+    color:white;
+    text-align:center;
+    padding:18px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+
+header{
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+nav{
+
+display:flex;
+
+flex-wrap:wrap;
+
+justify-content:center;
+
+}
+
+.container{
+
+overflow-x:auto;
+
+}
+
+table{
+
+min-width:850px;
+
+}
+
+}
