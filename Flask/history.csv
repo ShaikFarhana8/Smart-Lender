@@ -4,3 +4,4 @@ Date,Prediction,Probability,Risk,Applicant Income,Loan Amount
 14-07-2026 10:04 PM,Loan Rejected ❌,38.0,🔴 Very High Risk,5000.0,30000.0
 14-07-2026 10:20 PM,Loan Approved ✅,72.0,🟡 Medium Risk,50000.0,300000.0
 15-07-2026 09:01 AM,Loan Rejected ❌,38.0,🔴 Very High Risk,60000.0,200000.0
+15-07-2026 09:15 PM,Loan Approved ✅,57.0,🟠 High Risk,10000.0,200000.0
